@@ -102,32 +102,76 @@ function DataRenderer({fieldName, record}) {
 	let out = '';
 
 	switch(value) {
-		case 'VenueAddress' :
-			out = <VenueAddressRenderer/>
-			break;
 		case 'CrewContacts' :
-			out = <ContactListRenderer/>
+			out = <FourColumnTableRenderer
+				tableName={'Crew & Contacts'}
+				viewName={'Crew Contacts'}
+				column1Heading={'Name'}
+				column1Cell={'Name'}
+				column2Heading={'Role'}
+				column2Cell={'Role'}
+				column3Heading={'Phone'}
+				column3Cell={'Phone'}
+				column4Heading={'Email'}
+				column4Cell={'Email'}
+			/>
 			break;
 		case 'DestinationFlights':
-			out = <DestinationFlightsRenderer/>
+			out = <FourColumnTableRenderer
+				tableName={'Crew & Contacts'}
+				viewName={'Destination Flights'}
+				column1Heading={'Arrival Time'}
+				column1Cell={'Local Arrival Time (Destination Flight)'}
+				column2Heading={'Airport'}
+				column2Cell={'Arrival Airport (Destination Flight)'}
+				column3Heading={'Person'}
+				column3Cell={'Name'}
+				column4Heading={'Flight'}
+				column4Cell={'Flight # (Destination Flight)'}
+			/>
 			break;
 		case 'HotelConfirmations':
-			out = <HotelConfirmationsRenderer/>
+			out = <FourColumnTableRenderer
+				tableName={'Crew & Contacts'}
+				viewName={'Crew Hotel'}
+				column1Heading={'Name'}
+				column1Cell={'Name'}
+				column2Heading={'Check In'}
+				column2Cell={'Check In (Hotel)'}
+				column3Heading={'Check Out'}
+				column3Cell={'Check Out (Hotel)'}
+				column4Heading={'Confirmation #'}
+				column4Cell={'Confirmation # (Hotel)'}
+			/>
 			break;
 		case 'ReturnFlights':
-			out = <ReturnFlightsRenderer/>
+			out = <FourColumnTableRenderer
+				tableName={'Crew & Contacts'}
+				viewName={'Return Flights'}
+				column1Heading={'Departure Time'}
+				column1Cell={'Local Departure Time (Return Flight)'}
+				column2Heading={'Airport'}
+				column2Cell={'Arrival Airport (Return Flight)'}
+				column3Heading={'Person'}
+				column3Cell={'Name'}
+				column4Heading={'Flight'}
+				column4Cell={'Flight # (Return Flight)'}
+			/>
 			break;
 		case 'ScheduleOverview':
+			break;
+		case 'VenueAddress' :
+			out = <VenueAddressRenderer/>
 			break;
 	}
 
 	return out;
 }
 
-function ContactListRenderer() {
+function FourColumnTableRenderer({tableName, viewName, column1Heading, column1Cell, column2Heading, column2Cell, column3Heading, column3Cell, column4Heading, column4Cell}) {
 	const base = useBase();
-	const table = base.getTableByName('Crew & Contacts');
-	const view = table.getViewByNameIfExists('Crew Contacts');
+	const table = base.getTableByName(tableName);
+	const view = table.getViewByNameIfExists(viewName);
 	const records = useRecords(view);
 
 	return (
@@ -135,16 +179,16 @@ function ContactListRenderer() {
 			<thead>
 				<tr>
 					<td style={{textAlign: 'center', whiteSpace: 'nowrap', fontWeight: 'bold', padding: '0 10px'}}>
-							Name
+						{column1Heading}
 					</td>
 					<td style={{textAlign: 'center', whiteSpace: 'nowrap', fontWeight: 'bold', padding: '0 10px'}}>
-							Role
+						{column2Heading}
 					</td>
 					<td style={{textAlign: 'center', whiteSpace: 'nowrap', fontWeight: 'bold', padding: '0 10px'}}>
-							Phone
+						{column3Heading}
 					</td>
 					<td style={{textAlign: 'center', whiteSpace: 'nowrap', fontWeight: 'bold', padding: '0 10px'}}>
-							Email
+						{column4Heading}
 					</td>
 				</tr>
 			</thead>
@@ -152,90 +196,10 @@ function ContactListRenderer() {
 			{records.map(record => {
 				return (
 					<tr key={record.id} style={{borderTop: '2px solid #ddd'}}>
-						<td style={{textAlign: 'left', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString('Name')}</td>
-						<td style={{textAlign: 'center', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString('Role')}</td>
-						<td style={{textAlign: 'center', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString('Phone')}</td>
-						<td style={{textAlign: 'center', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString('Email')}</td>
-					</tr>
-				);
-			})}
-			</tbody>
-		</table>
-	);
-}
-
-function DestinationFlightsRenderer() {
-	const base = useBase();
-	const table = base.getTableByName('Crew & Contacts');
-	const view = table.getViewByNameIfExists('Destination Flights');
-	const records = useRecords(view);
-
-	return (
-		<table style={{borderCollapse: 'collapse', margin: '0 10px 10px 10px'}}>
-			<thead>
-				<tr>
-					<td style={{textAlign: 'center', whiteSpace: 'nowrap', fontWeight: 'bold', padding: '0 10px'}}>
-							Arrival Time
-					</td>
-					<td style={{textAlign: 'center', whiteSpace: 'nowrap', fontWeight: 'bold', padding: '0 10px'}}>
-							Airport
-					</td>
-					<td style={{textAlign: 'center', whiteSpace: 'nowrap', fontWeight: 'bold', padding: '0 10px'}}>
-							Person
-					</td>
-					<td style={{textAlign: 'center', whiteSpace: 'nowrap', fontWeight: 'bold', padding: '0 10px'}}>
-							Flight
-					</td>
-				</tr>
-			</thead>
-			<tbody>
-			{records.map(record => {
-				return (
-					<tr key={record.id} style={{borderTop: '2px solid #ddd'}}>
-						<td style={{textAlign: 'left', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString('Local Arrival Time (Destination Flight)')}</td>
-						<td style={{textAlign: 'center', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString('Arrival Airport (Destination Flight)')}</td>
-						<td style={{textAlign: 'left', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString('Name')}</td>
-						<td style={{textAlign: 'center', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString('Flight # (Destination Flight)')}</td>
-					</tr>
-				);
-			})}
-			</tbody>
-		</table>
-	);
-}
-
-function HotelConfirmationsRenderer() {
-	const base = useBase();
-	const table = base.getTableByName('Crew & Contacts');
-	const view = table.getViewByNameIfExists('Crew Hotel');
-	const records = useRecords(view);
-
-	return (
-		<table style={{borderCollapse: 'collapse', margin: '0 10px 10px 10px'}}>
-			<thead>
-				<tr>
-					<td style={{textAlign: 'center', whiteSpace: 'nowrap', fontWeight: 'bold', padding: '0 10px'}}>
-							Name
-					</td>
-					<td style={{textAlign: 'center', whiteSpace: 'nowrap', fontWeight: 'bold', padding: '0 10px'}}>
-							Check In
-					</td>
-					<td style={{textAlign: 'center', whiteSpace: 'nowrap', fontWeight: 'bold', padding: '0 10px'}}>
-							Check Out
-					</td>
-					<td style={{textAlign: 'center', whiteSpace: 'nowrap', fontWeight: 'bold', padding: '0 10px'}}>
-							Confirmation #
-					</td>
-				</tr>
-			</thead>
-			<tbody>
-			{records.map(record => {
-				return (
-					<tr key={record.id} style={{borderTop: '2px solid #ddd'}}>
-						<td style={{textAlign: 'left', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString('Name')}</td>
-						<td style={{textAlign: 'center', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString('Check In (Hotel)')}</td>
-						<td style={{textAlign: 'center', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString('Check Out (Hotel)')}</td>
-						<td style={{textAlign: 'center', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString('Confirmation # (Hotel)')}</td>
+						<td style={{textAlign: 'left', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString(column1Cell)}</td>
+						<td style={{textAlign: 'center', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString(column2Cell)}</td>
+						<td style={{textAlign: 'center', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString(column3Cell)}</td>
+						<td style={{textAlign: 'center', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString(column4Cell)}</td>
 					</tr>
 				);
 			})}
@@ -254,46 +218,6 @@ function NotesRenderer({table, fieldName, record}) {
 		<div>
 			<CellRenderer field={field} record={record} />
 		</div>) : "")
-	);
-}
-
-function ReturnFlightsRenderer() {
-	const base = useBase();
-	const table = base.getTableByName('Crew & Contacts');
-	const view = table.getViewByNameIfExists('Return Flights');
-	const records = useRecords(view);
-
-	return (
-		<table style={{borderCollapse: 'collapse', margin: '0 10px 10px 10px'}}>
-			<thead>
-				<tr>
-					<td style={{textAlign: 'center', whiteSpace: 'nowrap', fontWeight: 'bold', padding: '0 10px'}}>
-							Departure Time
-					</td>
-					<td style={{textAlign: 'center', whiteSpace: 'nowrap', fontWeight: 'bold', padding: '0 10px'}}>
-							Airport
-					</td>
-					<td style={{textAlign: 'center', whiteSpace: 'nowrap', fontWeight: 'bold', padding: '0 10px'}}>
-							Person
-					</td>
-					<td style={{textAlign: 'center', whiteSpace: 'nowrap', fontWeight: 'bold', padding: '0 10px'}}>
-							Flight
-					</td>
-				</tr>
-			</thead>
-			<tbody>
-			{records.map(record => {
-				return (
-					<tr key={record.id} style={{borderTop: '2px solid #ddd'}}>
-						<td style={{textAlign: 'left', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString('Local Departure Time (Return Flight)')}</td>
-						<td style={{textAlign: 'center', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString('Departure Airport (Return Flight)')}</td>
-						<td style={{textAlign: 'left', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString('Name')}</td>
-						<td style={{textAlign: 'center', whiteSpace: 'nowrap', padding: '0 10px'}}>{record.getCellValueAsString('Flight # (Return Flight)')}</td>
-					</tr>
-				);
-			})}
-			</tbody>
-		</table>
 	);
 }
 
